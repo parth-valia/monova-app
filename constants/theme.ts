@@ -19,7 +19,7 @@ export const Colors = {
     icon: '#666666',
     tabIconDefault: '#999999',
     tabIconSelected: tintColorLight,
-    border: '#E5E5E5',
+    border: '#E0E0E0',
     borderLight: '#F0F0F0',
     chip: '#F5F5F5',
     chipActive: '#000000',

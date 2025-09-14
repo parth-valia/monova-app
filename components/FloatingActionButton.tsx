@@ -1,9 +1,9 @@
-import React from 'react';
-import { StyleSheet, Pressable } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring, withSequence } from 'react-native-reanimated';
 import { Colors, Spacing } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { createShadowStyle } from '@/utils/shadow';
+import React from 'react';
+import { Pressable, StyleSheet } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSequence, withSpring } from 'react-native-reanimated';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -53,7 +53,7 @@ export function FloatingActionButton() {
       style={[
         styles.fab,
         {
-          backgroundColor: colorScheme === 'dark' ? colors.backgroundSecondary : colors.text,
+          backgroundColor: colorScheme === 'dark' ? colors.text : colors.backgroundSecondary,
         },
         animatedStyle,
       ]}

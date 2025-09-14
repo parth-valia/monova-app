@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, StatusBar, ScrollView, Pressable } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
-import { Colors, Spacing, BorderRadius, Typography } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { CollectionsTab } from '@/components/tabs/CollectionsTab';
-import { OutfitsTab } from '@/components/tabs/OutfitsTab';
-import { ItemsTab } from '@/components/tabs/ItemsTab';
 import { FloatingActionButton } from '@/components/FloatingActionButton';
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+import { TabButton } from '@/components/TabButton';
+import { CollectionsTab } from '@/components/tabs/CollectionsTab';
+import { ItemsTab } from '@/components/tabs/ItemsTab';
+import { OutfitsTab } from '@/components/tabs/OutfitsTab';
+import { BorderRadius, Colors, Spacing, Typography } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import React, { useState } from 'react';
+import { Dimensions, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 type TabType = 'Collections' | 'Outfits' | 'Items';
 
@@ -16,6 +15,22 @@ export default function SavedScreen() {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
   const [activeTab, setActiveTab] = useState<TabType>('Collections');
+  
+  // Shared value for slide animation
+  const slideX = useSharedValue(0);
+  const screenWidth = Dimensions.get('window').width;
+  const tabContainerWidth = screenWidth - (Spacing.xl * 2); 
+  const tabWidth = (tabContainerWidth - 10) / 3; 
+
+  const handleTabPress = (tab: TabType, index: number) => {
+    setActiveTab(tab);
+    const slidePosition = index * tabWidth;
+    slideX.value = withTiming(slidePosition, {
+      duration: 300,
+      easing: Easing.out(Easing.ease),
+
+    });
+  };
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -30,6 +45,11 @@ export default function SavedScreen() {
     }
   };
 
+  // Animated style for the sliding indicator
+  const slideIndicatorStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: slideX.value }],
+  }));
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
@@ -41,12 +61,19 @@ export default function SavedScreen() {
 
       {/* Tab Navigation */}
       <View style={styles.tabContainer}>
-        {(['Collections', 'Outfits', 'Items'] as TabType[]).map((tab) => (
+        <Animated.View 
+          style={[
+            styles.slideIndicator, 
+            { backgroundColor: colors.backgroundSecondary },
+            slideIndicatorStyle
+          ]} 
+        />
+        {(['Collections', 'Outfits', 'Items'] as TabType[]).map((tab, index) => (
           <TabButton
             key={tab}
             title={tab}
             isActive={activeTab === tab}
-            onPress={() => setActiveTab(tab)}
+            onPress={() => handleTabPress(tab, index)}
             colors={colors}
           />
         ))}
@@ -60,59 +87,6 @@ export default function SavedScreen() {
       {/* Floating Action Button */}
       <FloatingActionButton />
     </SafeAreaView>
-  );
-}
-
-interface TabButtonProps {
-  title: string;
-  isActive: boolean;
-  onPress: () => void;
-  colors: any;
-}
-
-function TabButton({ title, isActive, onPress, colors }: TabButtonProps) {
-  const scale = useSharedValue(1);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-
-  const handlePressIn = () => {
-    scale.value = withSpring(0.95, { damping: 15, stiffness: 300 });
-  };
-
-  const handlePressOut = () => {
-    scale.value = withSpring(1, { damping: 15, stiffness: 300 });
-  };
-
-  return (
-    <AnimatedPressable
-      style={[
-        styles.tabButton,
-        {
-          backgroundColor: isActive ? colors.backgroundSecondary : 'transparent',
-        },
-        animatedStyle,
-      ]}
-      onPress={onPress}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      accessibilityRole="button"
-      accessibilityLabel={`${title} tab`}
-      accessibilityState={{ selected: isActive }}
-    >
-      <Text
-        style={[
-          styles.tabButtonText,
-          {
-            color: isActive ? colors.text : colors.textSecondary,
-            fontWeight: isActive ? Typography.weights.semibold : Typography.weights.normal,
-          },
-        ]}
-      >
-        {title}
-      </Text>
-    </AnimatedPressable>
   );
 }
 
@@ -131,25 +105,23 @@ const styles = StyleSheet.create({
   },
   tabContainer: {
     flexDirection: 'row',
-    paddingHorizontal: Spacing.xl,
-    paddingBottom: Spacing.lg,
-    backgroundColor: '#F8F8F8',
-    borderRadius: BorderRadius.xxl,
+    position: 'relative',
+    borderRadius: BorderRadius.full,
+    borderColor: '#E0E0E0',
+    borderWidth: 1,
     marginHorizontal: Spacing.xl,
-    padding: 4,
+    padding: 5,
+    marginBottom: Spacing.xs,
+    marginTop: Spacing.md,
   },
-  tabButton: {
-    flex: 1,
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.sm,
+  slideIndicator: {
+    position: 'absolute',
+    top: 5,
+    bottom: 5,
+    left: 5,
+    width: `${100/3}%`,
     borderRadius: BorderRadius.xl,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: 44, // Accessibility requirement
-  },
-  tabButtonText: {
-    fontSize: Typography.sizes.md,
-    fontWeight: Typography.weights.medium,
+    zIndex: 0,
   },
   content: {
     flex: 1,

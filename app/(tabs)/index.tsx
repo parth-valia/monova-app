@@ -1,14 +1,16 @@
-import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, StatusBar, ScrollView } from 'react-native';
-import { Colors, Spacing, Typography } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { CollectionCard } from '@/components/CollectionCard';
 import { OutfitCard } from '@/components/OutfitCard';
+import { Colors, Spacing, Typography } from '@/constants/theme';
 import { collections, outfitCards } from '@/data/wardrobeData';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import React from 'react';
+import { Dimensions, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 
-export default function HomeScreen() {
+function HomeScreen() {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
+  const screenWidth = Dimensions.get('window').width;
+  const cardWidth = Math.max(screenWidth * 0.33, 180); // At least 33% of screen width, minimum 180px
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -48,13 +50,14 @@ export default function HomeScreen() {
             contentContainerStyle={styles.outfitsContainer}
           >
             {outfitCards.slice(0, 3).map((outfit) => (
-              <OutfitCard
-                key={outfit.id}
-                outfit={outfit}
-                onPress={() => {
-                  console.log('Outfit pressed:', outfit.id);
-                }}
-              />
+              <View key={outfit.id} style={[styles.outfitCardWrapper, { width: cardWidth }]}>
+                <OutfitCard
+                  outfit={outfit}
+                  onPress={() => {
+                    console.log('Outfit pressed:', outfit.id);
+                  }}
+                />
+              </View>
             ))}
           </ScrollView>
         </View>
@@ -96,9 +99,15 @@ const styles = StyleSheet.create({
   },
   outfitsContainer: {
     paddingRight: Spacing.xl,
+    gap: Spacing.md,
+  },
+  outfitCardWrapper: {
+    marginRight: Spacing.md,
   },
   outfitsScroll: {
     paddingLeft: Spacing.lg,
     paddingRight: Spacing.lg,
   },
 });
+
+export default HomeScreen;

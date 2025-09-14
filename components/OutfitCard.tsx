@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
-import { Colors, Spacing, BorderRadius, Typography, TouchTargets } from '@/constants/theme';
-import { Accessibility } from '@/constants/accessibility';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { createShadowStyle } from '@/utils/shadow';
+import { BorderRadius, Colors, Spacing, Typography } from '@/constants/theme';
 import { OutfitCard as OutfitCardType } from '@/data/wardrobeData';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import { createShadowStyle } from '@/utils/shadow';
+import React, { useState } from 'react';
+import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 interface OutfitCardProps {
   outfit: OutfitCardType;
@@ -33,51 +32,80 @@ export function OutfitCard({ outfit, onPress }: OutfitCardProps) {
     scale.value = withSpring(1, { damping: 15, stiffness: 300 });
   };
 
-  // For Outfits tab - show multiple items in a 2x2 grid layout like reference
   const renderOutfitItems = () => {
     const items = Object.values(outfit.items).filter(Boolean);
     
+    if (items.length === 1) {
+      return (
+        <View style={styles.singleItemContainer}>
+          <Image
+            source={{ uri: items[0].image }}
+            style={styles.fullImage}
+            resizeMode="cover"
+          />
+        </View>
+      );
+    }
+    
+    if (items.length === 2) {
+      return (
+        <View style={styles.twoItemsContainer}>
+          {items.slice(0, 2).map((item, index) => (
+            <View key={index} style={styles.halfWidthItem}>
+              <Image
+                source={{ uri: item.image }}
+                style={styles.fullImage}
+                resizeMode="cover"
+              />
+            </View>
+          ))}
+        </View>
+      );
+    }
+    
+    if (items.length === 3) {
+      return (
+        <View style={styles.threeItemsContainer}>
+          <View style={styles.leftHalfItem}>
+            <Image
+              source={{ uri: items[0].image }}
+              style={styles.fullImage}
+              resizeMode="cover"
+            />
+          </View>
+          <View style={styles.rightHalfContainer}>
+            <View style={styles.rightTopItem}>
+              <Image
+                source={{ uri: items[1].image }}
+                style={styles.fullImage}
+                resizeMode="cover"
+              />
+            </View>
+            <View style={styles.rightBottomItem}>
+              <Image
+                source={{ uri: items[2].image }}
+                style={styles.fullImage}
+                resizeMode="cover"
+              />
+            </View>
+          </View>
+        </View>
+      );
+    }
+    
     return (
-      <View style={styles.outfitGrid}>
+      <View style={styles.fourItemsContainer}>
         {items.slice(0, 4).map((item, index) => (
-          <View key={index} style={[styles.outfitItem, getOutfitItemStyle(index)]}>
+          <View key={index} style={styles.quarterItem}>
             <Image
               source={{ uri: item.image }}
-              style={styles.outfitItemImage}
+              style={styles.fullImage}
               resizeMode="cover"
             />
           </View>
         ))}
       </View>
     );
-  };
-
-  const getOutfitItemStyle = (index: number) => {
-    // Position items in 2x2 grid like reference images
-    switch (index) {
-      case 0: return { top: 0, left: 0 }; // Top left
-      case 1: return { top: 0, right: 0 }; // Top right
-      case 2: return { bottom: 0, left: 0 }; // Bottom left
-      case 3: return { bottom: 0, right: 0 }; // Bottom right
-      default: return {};
-    }
-  };
-
-  const getGridPosition = (index: number, totalItems: number) => {
-    if (totalItems === 1) return styles.singleItem;
-    if (totalItems === 2) {
-      return index === 0 ? styles.leftItem : styles.rightItem;
-    }
-    if (totalItems === 3) {
-      if (index === 0) return styles.topLeftItem;
-      if (index === 1) return styles.topRightItem;
-      return styles.bottomItem;
-    }
-    // For 4 items
-    if (index === 0) return styles.topLeftItem;
-    if (index === 1) return styles.topRightItem;
-    if (index === 2) return styles.bottomLeftItem;
-    return styles.bottomRightItem;
   };
 
   return (
@@ -107,22 +135,6 @@ export function OutfitCard({ outfit, onPress }: OutfitCardProps) {
           />
         </Pressable>
       </View>
-      
-      <View style={styles.content}>
-        <Text style={[styles.title, { color: colors.text }]} numberOfLines={1}>
-          {outfit.title}
-        </Text>
-        
-        <View style={styles.tagsContainer}>
-          {outfit.tags.map((tag, index) => (
-            <View key={index} style={[styles.tag, { backgroundColor: colors.chip }]}>
-              <Text style={[styles.tagText, { color: colors.chipText }]}>
-                {tag}
-              </Text>
-            </View>
-          ))}
-        </View>
-      </View>
     </AnimatedPressable>
   );
 }
@@ -133,10 +145,10 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.lg,
     overflow: 'hidden',
     ...createShadowStyle('#000', { width: 0, height: 1 }, 0.05, 2, 1),
-    minHeight: TouchTargets.large,
+    minHeight: Dimensions.get('window').height * 0.32,
   },
   outfitPreview: {
-    height: 200,
+    flex: 1,
     position: 'relative',
     borderRadius: BorderRadius.xl,
   },
@@ -152,92 +164,6 @@ const styles = StyleSheet.create({
   gridItemImage: {
     width: '100%',
     height: '100%',
-  },
-  // Single item layout
-  singleItem: {
-    top: Spacing.md,
-    left: Spacing.md,
-    right: Spacing.md,
-    bottom: Spacing.md,
-  },
-  // Two items layout
-  leftItem: {
-    top: Spacing.md,
-    left: Spacing.md,
-    width: 80,
-    height: 120,
-  },
-  rightItem: {
-    top: Spacing.md,
-    right: Spacing.md,
-    width: 80,
-    height: 120,
-  },
-  // Three items layout
-  topLeftItem: {
-    top: Spacing.md,
-    left: Spacing.md,
-    width: 70,
-    height: 70,
-  },
-  topRightItem: {
-    top: Spacing.md,
-    right: Spacing.md,
-    width: 70,
-    height: 70,
-  },
-  bottomItem: {
-    bottom: Spacing.md,
-    left: Spacing.md,
-    right: Spacing.md,
-    height: 60,
-  },
-  // Four items layout
-  bottomLeftItem: {
-    bottom: Spacing.md,
-    left: Spacing.md,
-    width: 70,
-    height: 60,
-  },
-  bottomRightItem: {
-    bottom: Spacing.md,
-    right: Spacing.md,
-    width: 70,
-    height: 60,
-  },
-  // Legacy styles (keeping for compatibility)
-  itemImageContainer: {
-    position: 'absolute',
-    borderRadius: BorderRadius.md,
-    overflow: 'hidden',
-  },
-  itemImage: {
-    width: '100%',
-    height: '100%',
-  },
-  topPosition: {
-    top: Spacing.md,
-    left: Spacing.md,
-    width: 80,
-    height: 80,
-  },
-  bottomPosition: {
-    top: Spacing.md,
-    right: Spacing.md,
-    width: 80,
-    height: 80,
-  },
-  footwearPosition: {
-    bottom: Spacing.md,
-    left: Spacing.md,
-    width: 60,
-    height: 60,
-  },
-  outerwearPosition: {
-    bottom: Spacing.md,
-    right: Spacing.md,
-    width: 70,
-    height: 70,
   },
   content: {
     padding: Spacing.lg,
@@ -261,20 +187,58 @@ const styles = StyleSheet.create({
     fontSize: Typography.sizes.xs,
     fontWeight: Typography.weights.medium,
   },
-  outfitGrid: {
+  // Single item layout
+  singleItemContainer: {
     flex: 1,
-    position: 'relative',
   },
-  outfitItem: {
-    position: 'absolute',
-    width: '48%',
-    height: '48%',
-    borderRadius: BorderRadius.sm,
-    overflow: 'hidden',
-  },
-  outfitItemImage: {
+  fullImage: {
     width: '100%',
     height: '100%',
+  },
+  
+  // Two items layout
+  twoItemsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  halfWidthItem: {
+    flex: 1,
+    marginHorizontal: 1,
+  },
+  
+  // Three items layout
+  threeItemsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  leftHalfItem: {
+    flex: 1,
+    marginRight: 1,
+  },
+  rightHalfContainer: {
+    flex: 1,
+    marginLeft: 1,
+  },
+  rightTopItem: {
+    flex: 1,
+    marginBottom: 1,
+  },
+  rightBottomItem: {
+    flex: 1,
+    marginTop: 1,
+  },
+  
+  // Four items layout
+  fourItemsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  quarterItem: {
+    width: '50%',
+    height: '50%',
+    paddingHorizontal: 1,
+    paddingVertical: 1,
   },
   saveButton: {
     position: 'absolute',

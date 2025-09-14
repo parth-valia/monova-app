@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, FlatList, Pressable } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring, FadeIn, SlideInDown } from 'react-native-reanimated';
-import { Colors, Spacing, BorderRadius, Typography } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { OutfitCard } from '@/components/OutfitCard';
+import { BorderRadius, Colors, Spacing, Typography } from '@/constants/theme';
 import { outfitCards } from '@/data/wardrobeData';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import React, { useState } from 'react';
+import { FlatList, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { AddNewChip } from '../chips/AddNewChip';
+import { CollectionChip } from '../chips/CollectionChip';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const collectionChips = [
-  { id: 'work', name: 'Work', icon: '🏢' },
+  { id: 'work', name: 'Work', icon: '💼' },
   { id: 'leisure', name: 'Leisure', icon: '🏖️' },
-  { id: 'date', name: 'Date', icon: '💕' },
+  { id: 'date', name: 'Date', icon: '🎀' },
   { id: 'party', name: 'Party', icon: '🎉' },
 ];
 
@@ -57,27 +59,27 @@ export function CollectionsTab() {
   return (
     <View style={styles.container}>
       {/* Horizontal Scrollable Chips */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.chipsContainer}
-        style={styles.chipsScrollView}
-      >
-        {/* Add New Chip */}
-        <AddNewChip colors={colors} />
-        
-        {/* Collection Chips */}
-        {collectionChips.map((chip) => (
-          <CollectionChip
-            key={chip.id}
-            chip={chip}
-            isSelected={selectedChip === chip.id}
-            onPress={() => setSelectedChip(chip.id)}
-            colors={colors}
-          />
-        ))}
-      </ScrollView>
-
+      <View>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.chipsContainer}
+        >
+          {/* Add New Chip */}
+          <AddNewChip colors={colors} />
+          
+          {/* Collection Chips */}
+          {collectionChips.map((chip) => (
+            <CollectionChip
+              key={chip.id}
+              chip={chip}
+              isSelected={selectedChip === chip.id}
+              onPress={() => setSelectedChip(chip.id)}
+              colors={colors}
+            />
+          ))}
+        </ScrollView>
+      </View>
       {/* Outfits Grid */}
       <FlatList
         data={filteredOutfits}
@@ -91,127 +93,13 @@ export function CollectionsTab() {
   );
 }
 
-interface CollectionChipProps {
-  chip: { id: string; name: string; icon: string };
-  isSelected: boolean;
-  onPress: () => void;
-  colors: any;
-}
-
-function CollectionChip({ chip, isSelected, onPress, colors }: CollectionChipProps) {
-  const colorScheme = useColorScheme();
-  const scale = useSharedValue(1);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-
-  const handlePressIn = () => {
-    scale.value = withSpring(0.95, { damping: 15, stiffness: 300 });
-  };
-
-  const handlePressOut = () => {
-    scale.value = withSpring(1, { damping: 15, stiffness: 300 });
-  };
-
-  // Get colors for chips - black text and gray border for unselected, transparent orange bg with orange border for selected
-  const getChipColors = () => {
-    if (isSelected) {
-      return {
-        background: 'rgba(255, 107, 53, 0.1)', // Transparent orange background
-        text: '#FF6B35', // Orange text
-        border: '#FF6B35', // Orange border
-      };
-    } else {
-      return {
-        background: 'transparent',
-        text: '#000000', // Black text for all unselected
-        border: '#CCCCCC', // Gray border for all unselected
-      };
-    }
-  };
-
-  const chipColors = getChipColors();
-
-  return (
-    <AnimatedPressable
-      style={[
-        styles.chip,
-        {
-          backgroundColor: chipColors.background,
-          borderColor: chipColors.border,
-          borderWidth: isSelected ? 0 : 1,
-        },
-        animatedStyle,
-      ]}
-      onPress={onPress}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      accessibilityRole="button"
-      accessibilityLabel={`${chip.name} collection`}
-      accessibilityState={{ selected: isSelected }}
-    >
-      <Text style={styles.chipIcon}>{chip.icon}</Text>
-      <Text
-        style={[
-          styles.chipText,
-          {
-            color: chipColors.text,
-            fontWeight: isSelected ? Typography.weights.semibold : Typography.weights.medium,
-          },
-        ]}
-      >
-        {chip.name}
-      </Text>
-    </AnimatedPressable>
-  );
-}
-
-function AddNewChip({ colors }: { colors: any }) {
-  const scale = useSharedValue(1);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-
-  const handlePressIn = () => {
-    scale.value = withSpring(0.95, { damping: 15, stiffness: 300 });
-  };
-
-  const handlePressOut = () => {
-    scale.value = withSpring(1, { damping: 15, stiffness: 300 });
-  };
-
-  return (
-    <AnimatedPressable
-      style={[
-        styles.addNewChip,
-        {
-          borderColor: colors.border,
-        },
-        animatedStyle,
-      ]}
-      onPress={() => console.log('Add new collection')}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      accessibilityRole="button"
-      accessibilityLabel="Add new collection"
-    >
-      <Text style={[styles.addNewText, { color: colors.textSecondary }]}>+ Add new</Text>
-    </AnimatedPressable>
-  );
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  chipsScrollView: {
-    maxHeight: 60,
-  },
   chipsContainer: {
     paddingHorizontal: Spacing.xl,
-    paddingBottom: Spacing.md,
+    paddingBottom: Spacing.xl,
   },
   addNewChip: {
     paddingHorizontal: Spacing.lg,
