@@ -1,11 +1,21 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Pressable, Modal, FlatList } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
-import { Colors, Spacing, BorderRadius, Typography, TouchTargets } from '@/constants/theme';
-import { Accessibility } from '@/constants/accessibility';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { createShadowStyle } from '@/utils/shadow';
+import { BorderRadius, Colors, Spacing, Typography } from "@/constants/theme";
+import React, { useState } from "react";
+import {
+  FlatList,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
+
+import { IconSymbol } from "@/components/ui/icon-symbol";
+import { createShadowStyle } from "@/utils/shadow";
 
 interface FilterDropdownProps {
   label: string;
@@ -16,12 +26,15 @@ interface FilterDropdownProps {
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-export function FilterDropdown({ label, options, selectedValue, onSelect }: FilterDropdownProps) {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
+export function FilterDropdown({
+  label,
+  options,
+  selectedValue,
+  onSelect,
+}: FilterDropdownProps) {
   const [isVisible, setIsVisible] = useState(false);
   const scale = useSharedValue(1);
-  const isFiltered = selectedValue !== 'All';
+  const isFiltered = selectedValue !== "All";
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -44,17 +57,20 @@ export function FilterDropdown({ label, options, selectedValue, onSelect }: Filt
     <Pressable
       style={[
         styles.option,
-        { 
-          backgroundColor: item === selectedValue ? colors.chipActive : colors.background,
-          borderBottomColor: colors.borderLight,
-        }
+        {
+          backgroundColor:
+            item === selectedValue ? Colors.chipActive : Colors.background,
+          borderBottomColor: Colors.borderLight,
+        },
       ]}
       onPress={() => handleSelect(item)}
     >
-      <Text 
+      <Text
         style={[
-          styles.optionText, 
-          { color: item === selectedValue ? colors.chipTextActive : colors.text }
+          styles.optionText,
+          {
+            color: item === selectedValue ? Colors.chipTextActive : Colors.text,
+          },
         ]}
       >
         {item}
@@ -68,10 +84,13 @@ export function FilterDropdown({ label, options, selectedValue, onSelect }: Filt
         style={[
           styles.dropdown,
           {
-            backgroundColor: isFiltered ? 'rgba(255, 107, 53, 0.1)' : colors.backgroundSecondary,
-            borderColor: isFiltered ? '#FF6B35' : colors.border,
+            backgroundColor: isFiltered
+              ? Colors.chipBackground
+              : Colors.backgroundSecondary,
+            borderColor: Colors.border,
+            borderWidth: isFiltered ? 1 : 0.5,
           },
-          animatedStyle
+          animatedStyle,
         ]}
         onPress={() => setIsVisible(true)}
         onPressIn={handlePressIn}
@@ -79,14 +98,10 @@ export function FilterDropdown({ label, options, selectedValue, onSelect }: Filt
         accessibilityRole="button"
         accessibilityLabel={`Filter by ${label}`}
       >
-        <Text style={[styles.dropdownText, { color: isFiltered ? '#FF6B35' : colors.chipText }]}>
-          {selectedValue === 'All' ? label : selectedValue}
+        <Text style={[styles.dropdownText, { color: Colors.chipText }]}>
+          {selectedValue === "All" ? label : selectedValue}
         </Text>
-        <IconSymbol
-          name="chevron.down"
-          size={14}
-          color={isFiltered ? '#FF6B35' : colors.chipText}
-        />
+        <IconSymbol name="chevron.down" size={14} color={Colors.chipText} />
       </AnimatedPressable>
 
       <Modal
@@ -95,19 +110,27 @@ export function FilterDropdown({ label, options, selectedValue, onSelect }: Filt
         animationType="fade"
         onRequestClose={() => setIsVisible(false)}
       >
-        <Pressable 
+        <Pressable
           style={styles.modalOverlay}
           onPress={() => setIsVisible(false)}
         >
-          <View style={[styles.modalContent, { backgroundColor: colors.background }]}>
-            <View style={[styles.modalHeader, { borderBottomColor: colors.border }]}>
-              <Text style={[styles.modalTitle, { color: colors.text }]}>
+          <View
+            style={[
+              styles.modalContent,
+              { backgroundColor: Colors.background },
+            ]}
+          >
+            <View
+              style={[styles.modalHeader, { borderBottomColor: Colors.border }]}
+            >
+              <Text style={[styles.modalTitle, { color: Colors.text }]}>
                 Select {label}
               </Text>
             </View>
             <FlatList
               data={options}
               renderItem={renderOption}
+              contentContainerStyle={{ overflow: "hidden" }}
               keyExtractor={(item) => item}
               style={styles.optionsList}
               showsVerticalScrollIndicator={false}
@@ -121,54 +144,53 @@ export function FilterDropdown({ label, options, selectedValue, onSelect }: Filt
 
 const styles = StyleSheet.create({
   dropdown: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: BorderRadius.xxl,
-    paddingHorizontal: Spacing.lg,
+    borderWidth: 1.5,
+    paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    minHeight: TouchTargets.small,
-    minWidth: 120,
-    marginRight: Spacing.sm,
-    ...createShadowStyle('#000', { width: 0, height: 1 }, 0.05, 1, 1),
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: Spacing.xs,
   },
   dropdownText: {
     fontSize: Typography.sizes.md,
     fontWeight: Typography.weights.medium,
     marginRight: Spacing.sm,
     flex: 1,
-    textAlign: 'left',
+    textAlign: "left",
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
     padding: Spacing.xl,
   },
   modalContent: {
+    margin: 20,
     borderRadius: BorderRadius.lg,
-    maxHeight: '70%',
-    width: '100%',
-    maxWidth: 300,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 12,
-    elevation: 8,
+    maxHeight: "80%",
+    width: "90%",
+    maxWidth: 400,
+    alignSelf: "center",
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.1)",
+    ...createShadowStyle("#000", { width: 0, height: 2 }, 0.2, 16, 8),
   },
   modalHeader: {
-    padding: Spacing.lg,
+    padding: Spacing.md,
     borderBottomWidth: 1,
+    alignItems: "center",
+    backgroundColor: "#FAFAFA",
   },
   modalTitle: {
-    fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.semibold,
-    textAlign: 'center',
+    fontSize: Typography.sizes.sm,
+    color: "#1A1A1A",
+    fontWeight: "500",
+    textAlign: "center",
   },
   optionsList: {
     maxHeight: 300,

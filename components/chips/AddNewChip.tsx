@@ -1,7 +1,12 @@
-import { BorderRadius, Spacing, Typography } from '@/constants/theme';
-import React from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import { BorderRadius, Spacing, Typography } from "@/constants/theme";
+import { Pressable, StyleSheet, Text } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
+
+import React from "react";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -33,13 +38,15 @@ export function AddNewChip({ colors }: AddNewChipProps) {
         },
         animatedStyle,
       ]}
-      onPress={() => console.log('Add new collection')}
+      onPress={() => console.log("Add new collection")}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       accessibilityRole="button"
       accessibilityLabel="Add new collection"
     >
-      <Text style={[styles.addNewText, { color: colors.textSecondary }]}>+ Add new</Text>
+      <Text style={[styles.addNewText, { color: colors.textSecondary }]}>
+        + Add new
+      </Text>
     </AnimatedPressable>
   );
 }
@@ -50,10 +57,10 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.xs,
     borderRadius: BorderRadius.full,
     borderWidth: 1,
-    borderStyle: 'dashed',
+    borderStyle: "dashed",
     marginRight: Spacing.sm,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   addNewText: {
     fontSize: Typography.sizes.sm,

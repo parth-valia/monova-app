@@ -2,8 +2,6 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { Colors, Spacing, BorderRadius, Typography, TouchTargets } from '@/constants/theme';
-import { Accessibility } from '@/constants/accessibility';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { createShadowStyle } from '@/utils/shadow';
 import { Collection } from '@/data/wardrobeData';
 
@@ -15,8 +13,6 @@ interface CollectionCardProps {
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export function CollectionCard({ collection, onPress }: CollectionCardProps) {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -33,31 +29,31 @@ export function CollectionCard({ collection, onPress }: CollectionCardProps) {
 
   return (
     <AnimatedPressable
-      style={[styles.card, { backgroundColor: colors.background }, animatedStyle]}
+      style={[styles.card, { backgroundColor: Colors.background }, animatedStyle]}
       onPress={onPress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       accessibilityRole="button"
       accessibilityLabel={`Collection: ${collection.name}`}
     >
-      <View style={[styles.imageContainer, { backgroundColor: colors.backgroundSecondary }]}>
+      <View style={[styles.imageContainer, { backgroundColor: Colors.backgroundSecondary }]}>
         <Image
           source={{ uri: collection.coverImage }}
           style={styles.image}
           resizeMode="cover"
         />
-        <View style={[styles.overlay, { backgroundColor: colors.overlay }]}>
-          <Text style={[styles.outfitCount, { color: colors.background }]}>
+        <View style={[styles.overlay, { backgroundColor: Colors.overlay }]}>
+          <Text style={[styles.outfitCount, { color: Colors.background }]}>
             {collection.outfits.length} outfits
           </Text>
         </View>
       </View>
       
       <View style={styles.content}>
-        <Text style={[styles.name, { color: colors.text }]} numberOfLines={1}>
+        <Text style={[styles.name, { color: Colors.text }]} numberOfLines={1}>
           {collection.name}
         </Text>
-        <Text style={[styles.description, { color: colors.textSecondary }]} numberOfLines={2}>
+        <Text style={[styles.description, { color: Colors.textSecondary }]} numberOfLines={2}>
           {collection.description}
         </Text>
       </View>
@@ -67,7 +63,7 @@ export function CollectionCard({ collection, onPress }: CollectionCardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.background,
     borderRadius: BorderRadius.lg,
     overflow: 'hidden',
     ...createShadowStyle('#000', { width: 0, height: 1 }, 0.05, 2, 1),

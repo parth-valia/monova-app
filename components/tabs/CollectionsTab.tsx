@@ -1,39 +1,64 @@
-import { OutfitCard } from '@/components/OutfitCard';
-import { BorderRadius, Colors, Spacing, Typography } from '@/constants/theme';
-import { outfitCards } from '@/data/wardrobeData';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import React, { useState } from 'react';
-import { FlatList, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import Animated, { FadeIn } from 'react-native-reanimated';
-import { AddNewChip } from '../chips/AddNewChip';
-import { CollectionChip } from '../chips/CollectionChip';
+import { BorderRadius, Colors, Spacing, Typography } from "@/constants/theme";
+import React, { useState } from "react";
+import {
+  FlatList,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import Animated, { FadeIn } from "react-native-reanimated";
+
+import { OutfitCard } from "@/components/OutfitCard";
+import { outfitCards } from "@/data/wardrobeData";
+import { AddNewChip } from "../chips/AddNewChip";
+import { CollectionChip } from "../chips/CollectionChip";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const collectionChips = [
-  { id: 'work', name: 'Work', icon: '💼' },
-  { id: 'leisure', name: 'Leisure', icon: '🏖️' },
-  { id: 'date', name: 'Date', icon: '🎀' },
-  { id: 'party', name: 'Party', icon: '🎉' },
+  { id: "work", name: "Work", icon: "💼" },
+  { id: "leisure", name: "Leisure", icon: "🏖️" },
+  { id: "date", name: "Date", icon: "🎀" },
+  { id: "party", name: "Party", icon: "🎉" },
 ];
 
 export function CollectionsTab() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
-  const [selectedChip, setSelectedChip] = useState<string>('work');
+  const [selectedChip, setSelectedChip] = useState<string>("work");
 
   // Filter outfits based on selected chip
   const getOutfitsForChip = (chipId: string) => {
-    return outfitCards.filter(outfit => {
+    return outfitCards.filter((outfit) => {
       switch (chipId) {
-        case 'work':
-          return outfit.tags.some(tag => tag.toLowerCase().includes('work') || tag.toLowerCase().includes('professional') || tag.toLowerCase().includes('business'));
-        case 'leisure':
-          return outfit.tags.some(tag => tag.toLowerCase().includes('casual') || tag.toLowerCase().includes('relaxed') || tag.toLowerCase().includes('weekend'));
-        case 'date':
-          return outfit.tags.some(tag => tag.toLowerCase().includes('elegant') || tag.toLowerCase().includes('evening') || tag.toLowerCase().includes('romantic'));
-        case 'party':
-          return outfit.tags.some(tag => tag.toLowerCase().includes('party') || tag.toLowerCase().includes('celebration') || tag.toLowerCase().includes('night'));
+        case "work":
+          return outfit.tags.some(
+            (tag) =>
+              tag.toLowerCase().includes("work") ||
+              tag.toLowerCase().includes("professional") ||
+              tag.toLowerCase().includes("business")
+          );
+        case "leisure":
+          return outfit.tags.some(
+            (tag) =>
+              tag.toLowerCase().includes("casual") ||
+              tag.toLowerCase().includes("relaxed") ||
+              tag.toLowerCase().includes("weekend")
+          );
+        case "date":
+          return outfit.tags.some(
+            (tag) =>
+              tag.toLowerCase().includes("elegant") ||
+              tag.toLowerCase().includes("evening") ||
+              tag.toLowerCase().includes("romantic")
+          );
+        case "party":
+          return outfit.tags.some(
+            (tag) =>
+              tag.toLowerCase().includes("party") ||
+              tag.toLowerCase().includes("celebration") ||
+              tag.toLowerCase().includes("night")
+          );
         default:
           return true;
       }
@@ -50,7 +75,7 @@ export function CollectionsTab() {
       <OutfitCard
         outfit={item}
         onPress={() => {
-          console.log('Outfit pressed:', item.title);
+          console.log("Outfit pressed:", item.title);
         }}
       />
     </Animated.View>
@@ -66,8 +91,8 @@ export function CollectionsTab() {
           contentContainerStyle={styles.chipsContainer}
         >
           {/* Add New Chip */}
-          <AddNewChip colors={colors} />
-          
+          <AddNewChip colors={Colors} />
+
           {/* Collection Chips */}
           {collectionChips.map((chip) => (
             <CollectionChip
@@ -75,7 +100,7 @@ export function CollectionsTab() {
               chip={chip}
               isSelected={selectedChip === chip.id}
               onPress={() => setSelectedChip(chip.id)}
-              colors={colors}
+              colors={Colors}
             />
           ))}
         </ScrollView>
@@ -86,8 +111,14 @@ export function CollectionsTab() {
         renderItem={renderOutfitItem}
         keyExtractor={(item) => item.id}
         numColumns={1}
+        scrollEnabled={false}
         contentContainerStyle={styles.gridContainer}
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          <Text style={[styles.emptyText, { color: Colors.textSecondary }]}>
+            No collection found
+          </Text>
+        }
       />
     </View>
   );
@@ -106,19 +137,19 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
-    borderStyle: 'dashed',
+    borderStyle: "dashed",
     marginRight: Spacing.sm,
     minHeight: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   addNewText: {
     fontSize: Typography.sizes.md,
     fontWeight: Typography.weights.medium,
   },
   chip: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.xxl,
@@ -138,7 +169,7 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.xl,
   },
   row: {
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   collectionItem: {
     flex: 1,
@@ -147,5 +178,11 @@ const styles = StyleSheet.create({
   },
   outfitItem: {
     marginBottom: Spacing.lg,
+  },
+  emptyText: {
+    fontSize: Typography.sizes.md,
+    fontWeight: Typography.weights.medium,
+    textAlign: "center",
+    marginTop: Spacing.xl,
   },
 });

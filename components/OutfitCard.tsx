@@ -1,11 +1,22 @@
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { BorderRadius, Colors, Spacing, Typography } from '@/constants/theme';
-import { OutfitCard as OutfitCardType } from '@/data/wardrobeData';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { createShadowStyle } from '@/utils/shadow';
-import React, { useState } from 'react';
-import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import { BorderRadius, Colors, Spacing, Typography } from "@/constants/theme";
+import React, { useState } from "react";
+import {
+  Dimensions,
+  Image,
+  Platform,
+  Pressable,
+  StyleSheet,
+  View,
+} from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
+
+import { IconSymbol } from "@/components/ui/icon-symbol";
+import { OutfitCard as OutfitCardType } from "@/data/wardrobeData";
+import { createShadowStyle } from "@/utils/shadow";
 
 interface OutfitCardProps {
   outfit: OutfitCardType;
@@ -15,8 +26,6 @@ interface OutfitCardProps {
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export function OutfitCard({ outfit, onPress }: OutfitCardProps) {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
   const scale = useSharedValue(1);
   const [isSaved, setIsSaved] = useState(true);
 
@@ -34,7 +43,7 @@ export function OutfitCard({ outfit, onPress }: OutfitCardProps) {
 
   const renderOutfitItems = () => {
     const items = Object.values(outfit.items).filter(Boolean);
-    
+
     if (items.length === 1) {
       return (
         <View style={styles.singleItemContainer}>
@@ -46,7 +55,7 @@ export function OutfitCard({ outfit, onPress }: OutfitCardProps) {
         </View>
       );
     }
-    
+
     if (items.length === 2) {
       return (
         <View style={styles.twoItemsContainer}>
@@ -62,7 +71,7 @@ export function OutfitCard({ outfit, onPress }: OutfitCardProps) {
         </View>
       );
     }
-    
+
     if (items.length === 3) {
       return (
         <View style={styles.threeItemsContainer}>
@@ -92,7 +101,7 @@ export function OutfitCard({ outfit, onPress }: OutfitCardProps) {
         </View>
       );
     }
-    
+
     return (
       <View style={styles.fourItemsContainer}>
         {items.slice(0, 4).map((item, index) => (
@@ -110,28 +119,37 @@ export function OutfitCard({ outfit, onPress }: OutfitCardProps) {
 
   return (
     <AnimatedPressable
-      style={[styles.card, { backgroundColor: colors.backgroundSecondary }, animatedStyle]}
+      style={[
+        styles.card,
+        { backgroundColor: Colors.backgroundSecondary },
+        animatedStyle,
+      ]}
       onPress={onPress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       accessibilityRole="button"
       accessibilityLabel={`Outfit: ${outfit.title}`}
     >
-      <View style={[styles.outfitPreview, { backgroundColor: colors.backgroundSecondary }]}>
+      <View
+        style={[
+          styles.outfitPreview,
+          { backgroundColor: Colors.backgroundSecondary },
+        ]}
+      >
         {renderOutfitItems()}
-        
+
         {/* Save Button - Bottom right corner, bigger size */}
-        <Pressable 
-          style={[styles.saveButton, { backgroundColor: colors.background }]}
+        <Pressable
+          style={[styles.saveButton, { backgroundColor: Colors.background }]}
           onPress={() => {
             setIsSaved(!isSaved);
-            console.log('Outfit', isSaved ? 'unsaved' : 'saved');
+            console.log("Outfit", isSaved ? "unsaved" : "saved");
           }}
         >
-          <IconSymbol 
-            name={isSaved ? "bookmark.fill" : "bookmark"} 
-            size={20} 
-            color={isSaved ? colors.text : colors.textSecondary} 
+          <IconSymbol
+            name={isSaved ? "bookmark.fill" : "bookmark"}
+            size={20}
+            color={isSaved ? Colors.text : Colors.textSecondary}
           />
         </Pressable>
       </View>
@@ -141,15 +159,21 @@ export function OutfitCard({ outfit, onPress }: OutfitCardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.background,
     borderRadius: BorderRadius.lg,
-    overflow: 'hidden',
-    ...createShadowStyle('#000', { width: 0, height: 1 }, 0.05, 2, 1),
-    minHeight: Dimensions.get('window').height * 0.32,
+    overflow: "hidden",
+    ...createShadowStyle("#000", { width: 0, height: 1 }, 0.05, 2, 1),
+    minHeight:
+      Platform.OS === "web"
+        ? Dimensions.get("window").width * 0.32
+        : Dimensions.get("window").height * 0.32,
+    padding: 12,
+    borderColor: Colors.border,
+    borderWidth: 0.5,
   },
   outfitPreview: {
     flex: 1,
-    position: 'relative',
+    position: "relative",
     borderRadius: BorderRadius.xl,
   },
   itemsGrid: {
@@ -157,13 +181,13 @@ const styles = StyleSheet.create({
     padding: Spacing.sm,
   },
   gridItem: {
-    position: 'absolute',
+    position: "absolute",
     borderRadius: BorderRadius.md,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   gridItemImage: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   content: {
     padding: Spacing.lg,
@@ -174,8 +198,8 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   tagsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: Spacing.xs,
   },
   tag: {
@@ -192,64 +216,64 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   fullImage: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
+    borderRadius: BorderRadius.lg,
   },
-  
+
   // Two items layout
   twoItemsContainer: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
+    gap: Spacing.md,
   },
   halfWidthItem: {
     flex: 1,
-    marginHorizontal: 1,
   },
-  
+
   // Three items layout
   threeItemsContainer: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   leftHalfItem: {
     flex: 1,
-    marginRight: 1,
+    marginRight: 12,
   },
   rightHalfContainer: {
     flex: 1,
-    marginLeft: 1,
   },
   rightTopItem: {
     flex: 1,
-    marginBottom: 1,
+    marginBottom: 12,
   },
   rightBottomItem: {
     flex: 1,
     marginTop: 1,
   },
-  
+
   // Four items layout
   fourItemsContainer: {
     flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    gap: Spacing.md,
   },
   quarterItem: {
-    width: '50%',
-    height: '50%',
-    paddingHorizontal: 1,
-    paddingVertical: 1,
+    width: "48%",
+    height: "48%",
   },
   saveButton: {
-    position: 'absolute',
+    position: "absolute",
     bottom: Spacing.md,
     right: Spacing.md,
     width: 40,
     height: 40,
     borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,

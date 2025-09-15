@@ -1,25 +1,30 @@
-import { CollectionCard } from '@/components/CollectionCard';
-import { OutfitCard } from '@/components/OutfitCard';
-import { Colors, Spacing, Typography } from '@/constants/theme';
-import { collections, outfitCards } from '@/data/wardrobeData';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import React from 'react';
-import { Dimensions, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Colors, Spacing, Typography } from "@/constants/theme";
+import { collections, outfitCards } from "@/data/wardrobeData";
+import {
+  Dimensions,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+
+import { CollectionCard } from "@/components/CollectionCard";
+import { OutfitCard } from "@/components/OutfitCard";
+import React from "react";
 
 function HomeScreen() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
-  const screenWidth = Dimensions.get('window').width;
-  const cardWidth = Math.max(screenWidth * 0.33, 180); // At least 33% of screen width, minimum 180px
-
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
-      
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: Colors.background }]}
+    >
+      <StatusBar barStyle={"dark-content"} />
+
       {/* Header */}
       <View style={styles.header}>
-        <Text style={[styles.title, { color: colors.text }]}>Home</Text>
-        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+        <Text style={[styles.title, { color: Colors.text }]}>Home</Text>
+        <Text style={[styles.subtitle, { color: Colors.textSecondary }]}>
           Welcome to your wardrobe
         </Text>
       </View>
@@ -27,14 +32,16 @@ function HomeScreen() {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Featured Collections Section */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Featured Collections</Text>
+          <Text style={[styles.sectionTitle, { color: Colors.text }]}>
+            Featured Collections
+          </Text>
           <View style={styles.collectionsGrid}>
             {collections.slice(0, 4).map((collection) => (
               <CollectionCard
                 key={collection.id}
                 collection={collection}
                 onPress={() => {
-                  console.log('Collection pressed:', collection.name);
+                  console.log("Collection pressed:", collection.name);
                 }}
               />
             ))}
@@ -43,18 +50,20 @@ function HomeScreen() {
 
         {/* Recent Outfits Section */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Recent Outfits</Text>
+          <Text style={[styles.sectionTitle, { color: Colors.text }]}>
+            Recent Outfits
+          </Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.outfitsContainer}
           >
             {outfitCards.slice(0, 3).map((outfit) => (
-              <View key={outfit.id} style={[styles.outfitCardWrapper, { width: cardWidth }]}>
+              <View key={outfit.id} style={[styles.outfitCardWrapper]}>
                 <OutfitCard
                   outfit={outfit}
                   onPress={() => {
-                    console.log('Outfit pressed:', outfit.id);
+                    console.log("Outfit pressed:", outfit.id);
                   }}
                 />
               </View>
@@ -93,16 +102,17 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
   },
   collectionsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
   },
   outfitsContainer: {
     paddingRight: Spacing.xl,
     gap: Spacing.md,
   },
   outfitCardWrapper: {
-    marginRight: Spacing.md,
+    marginRight: Spacing.sm,
+    width: Dimensions.get("window").width * 0.8,
   },
   outfitsScroll: {
     paddingLeft: Spacing.lg,

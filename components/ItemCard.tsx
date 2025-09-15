@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
-import { Colors, Spacing, BorderRadius, Typography, TouchTargets } from '@/constants/theme';
-import { Accessibility } from '@/constants/accessibility';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { WardrobeItem } from '@/data/wardrobeData';
-import { createShadowStyle } from '@/utils/shadow';
+import {
+  BorderRadius,
+  Colors,
+  Spacing,
+  TouchTargets,
+  Typography,
+} from "@/constants/theme";
+import React, { useState } from "react";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
+
+import { IconSymbol } from "@/components/ui/icon-symbol";
+import { Accessibility } from "@/constants/accessibility";
+import { WardrobeItem } from "@/data/wardrobeData";
+import { createShadowStyle } from "@/utils/shadow";
 
 interface ItemCardProps {
   item: WardrobeItem;
@@ -17,8 +27,6 @@ interface ItemCardProps {
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export function ItemCard({ item, onPress, showTags = true }: ItemCardProps) {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
   const scale = useSharedValue(1);
   const [isBookmarked, setIsBookmarked] = useState(true);
 
@@ -48,14 +56,22 @@ export function ItemCard({ item, onPress, showTags = true }: ItemCardProps) {
       accessibilityLabel={`${Accessibility.labels.itemCard}: ${item.name}`}
       accessibilityHint={Accessibility.hints.itemCard}
     >
-      <View style={[styles.imageContainer, { backgroundColor: colors.backgroundSecondary }]}>
+      <View
+        style={[
+          styles.imageContainer,
+          { backgroundColor: Colors.backgroundSecondary },
+        ]}
+      >
         <Image
           source={{ uri: item.image }}
           style={styles.image}
           resizeMode="cover"
         />
         <Pressable
-          style={[styles.bookmarkButton, { backgroundColor: colors.background }]}
+          style={[
+            styles.bookmarkButton,
+            { backgroundColor: Colors.background },
+          ]}
           onPress={handleBookmarkPress}
           accessibilityRole="button"
           accessibilityLabel={isBookmarked ? "Remove bookmark" : "Add bookmark"}
@@ -63,26 +79,38 @@ export function ItemCard({ item, onPress, showTags = true }: ItemCardProps) {
           <IconSymbol
             name={isBookmarked ? "bookmark.fill" : "bookmark"}
             size={16}
-            color={isBookmarked ? colors.text : colors.textSecondary}
+            color={isBookmarked ? Colors.text : Colors.textSecondary}
           />
         </Pressable>
       </View>
-      
+
       <View style={styles.content}>
         {showTags && item.style.length > 0 && (
           <View style={styles.categoryContainer}>
-            <View style={[styles.categoryIcon, getCategoryIconStyle(item.style[0], colors)]}>
-              <Text style={[styles.categoryIconText, getCategoryTextStyle(item.style[0], colors)]}>
+            <View
+              style={[
+                styles.categoryIcon,
+                getCategoryIconStyle(item.style[0], Colors),
+              ]}
+            >
+              <Text
+                style={[
+                  styles.categoryIconText,
+                  getCategoryTextStyle(item.style[0], Colors),
+                ]}
+              >
                 {getCategoryIcon(item.style[0])}
               </Text>
             </View>
-            <Text style={[styles.categoryText, { color: colors.textSecondary }]}>
+            <Text
+              style={[styles.categoryText, { color: Colors.textSecondary }]}
+            >
               {item.style[0]}
             </Text>
           </View>
         )}
-        
-        <Text style={[styles.name, { color: colors.text }]} numberOfLines={2}>
+
+        <Text style={[styles.name, { color: Colors.text }]} numberOfLines={2}>
           {item.name}
         </Text>
       </View>
@@ -92,28 +120,44 @@ export function ItemCard({ item, onPress, showTags = true }: ItemCardProps) {
 
 const getCategoryIcon = (style: string) => {
   switch (style.toLowerCase()) {
-    case 'crop': return '🎀';
-    case 'striped': return '🏢';
-    case 'denim': return '🌊';
-    case 'wide leg': return '🏢';
-    case 'golden': return '✨';
-    case 'elegant': return '🌟';
-    case 'classic': return '🏢';
-    case 'casual': return '👕';
-    default: return '👔';
+    case "crop":
+      return "🎀";
+    case "striped":
+      return "🏢";
+    case "denim":
+      return "🌊";
+    case "wide leg":
+      return "🏢";
+    case "golden":
+      return "✨";
+    case "elegant":
+      return "🌟";
+    case "classic":
+      return "🏢";
+    case "casual":
+      return "👕";
+    default:
+      return "👔";
   }
 };
 
 const getCategoryIconStyle = (style: string, colors: any) => {
   const baseStyle = { backgroundColor: colors.chip };
   switch (style.toLowerCase()) {
-    case 'crop': return { ...baseStyle, backgroundColor: '#FFE4E1' };
-    case 'striped': return { ...baseStyle, backgroundColor: '#F0F8FF' };
-    case 'denim': return { ...baseStyle, backgroundColor: '#E6F3FF' };
-    case 'wide leg': return { ...baseStyle, backgroundColor: '#F5F5DC' };
-    case 'golden': return { ...baseStyle, backgroundColor: '#FFF8DC' };
-    case 'elegant': return { ...baseStyle, backgroundColor: '#F0FFF0' };
-    default: return baseStyle;
+    case "crop":
+      return { ...baseStyle, backgroundColor: "#FFE4E1" };
+    case "striped":
+      return { ...baseStyle, backgroundColor: "#F0F8FF" };
+    case "denim":
+      return { ...baseStyle, backgroundColor: "#E6F3FF" };
+    case "wide leg":
+      return { ...baseStyle, backgroundColor: "#F5F5DC" };
+    case "golden":
+      return { ...baseStyle, backgroundColor: "#FFF8DC" };
+    case "elegant":
+      return { ...baseStyle, backgroundColor: "#F0FFF0" };
+    default:
+      return baseStyle;
   }
 };
 
@@ -123,31 +167,31 @@ const getCategoryTextStyle = (style: string, colors: any) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: BorderRadius.lg,
-    overflow: 'hidden',
-    ...createShadowStyle('#000', { width: 0, height: 1 }, 0.05, 2, 1),
+    overflow: "hidden",
+    ...createShadowStyle("#000", { width: 0, height: 1 }, 0.05, 2, 1),
     minHeight: TouchTargets.large, // Ensure adequate touch target
   },
   imageContainer: {
     aspectRatio: 1,
     borderRadius: BorderRadius.lg,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   image: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   bookmarkButton: {
-    position: 'absolute',
+    position: "absolute",
     top: Spacing.sm,
     right: Spacing.sm,
     width: TouchTargets.small, // 44px minimum touch target
     height: TouchTargets.small,
     borderRadius: TouchTargets.small / 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 1,
@@ -160,16 +204,16 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
   },
   categoryContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: Spacing.xs,
   },
   categoryIcon: {
     width: 20,
     height: 20,
     borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginRight: Spacing.xs,
   },
   categoryIconText: {
@@ -178,7 +222,7 @@ const styles = StyleSheet.create({
   categoryText: {
     fontSize: Typography.sizes.xs,
     fontWeight: Typography.weights.medium,
-    textTransform: 'capitalize',
+    textTransform: "capitalize",
   },
   name: {
     fontSize: Typography.sizes.md,
@@ -191,8 +235,8 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   tagsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: Spacing.xs,
   },
   tag: {
@@ -203,6 +247,6 @@ const styles = StyleSheet.create({
   tagText: {
     fontSize: Typography.sizes.xs,
     fontWeight: Typography.weights.medium,
-    textTransform: 'capitalize',
+    textTransform: "capitalize",
   },
 });

@@ -1,9 +1,10 @@
-import React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
-import Animated, { FadeIn } from 'react-native-reanimated';
-import { Spacing } from '@/constants/theme';
-import { OutfitCard } from '@/components/OutfitCard';
-import { outfitCards } from '@/data/wardrobeData';
+import { FlatList, StyleSheet, View } from "react-native";
+import Animated, { FadeIn } from "react-native-reanimated";
+
+import { OutfitCard } from "@/components/OutfitCard";
+import { Spacing } from "@/constants/theme";
+import { outfitCards } from "@/data/wardrobeData";
+import React from "react";
 
 export function OutfitsTab() {
   const renderOutfitItem = ({ item, index }: { item: any; index: number }) => (
@@ -14,7 +15,7 @@ export function OutfitsTab() {
       <OutfitCard
         outfit={item}
         onPress={() => {
-          console.log('Outfit pressed:', item.name);
+          console.log("Outfit pressed:", item.name);
         }}
       />
     </Animated.View>
@@ -27,6 +28,7 @@ export function OutfitsTab() {
         renderItem={renderOutfitItem}
         keyExtractor={(item) => item.id}
         numColumns={1}
+        scrollEnabled={false}
         contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
       />

@@ -1,20 +1,17 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors, Typography } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Colors, Typography } from "@/constants/theme";
+import { HapticTab } from "@/components/haptic-tab";
+import { Icon } from "@/components/ui/icon";
+import { Tabs } from "expo-router";
+import React from "react";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
+  const colors = Colors;
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: colors.tint,
-        tabBarInactiveTintColor: colors.tabIconDefault,
+        tabBarActiveTintColor: Colors.orange,
+tabBarInactiveTintColor: Colors.tabIconDefault,
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarStyle: {
@@ -24,23 +21,35 @@ export default function TabLayout() {
           height: 88,
         },
         tabBarLabelStyle: {
-          fontSize: Typography.sizes.sm,
+          fontSize: 14,
           fontWeight: Typography.weights.medium,
           marginTop: 4,
         },
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={24} name="house.fill" color={color} />,
+          title: "Home",
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color }) => (
+            <Icon name="home" size={24} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="saved"
         options={{
-          title: 'Saved',
-          tabBarIcon: ({ color }) => <IconSymbol size={24} name="bookmark.fill" color={color} />,
+          title: "Saved",
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color }) => (
+            <Icon
+              name="bookmark-outline"
+              type="material"
+              color={color}
+              size={24}
+            />
+          ),
         }}
       />
     </Tabs>

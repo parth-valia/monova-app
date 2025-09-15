@@ -1,43 +1,82 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, ScrollView } from 'react-native';
-import Animated, { FadeIn } from 'react-native-reanimated';
-import { Colors, Spacing } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { ItemCard } from '@/components/ItemCard';
-import { FilterDropdown } from '@/components/FilterDropdown';
-import { wardrobeItems } from '@/data/wardrobeData';
+import { Colors, Spacing } from "@/constants/theme";
+import React, { useState } from "react";
+import { FlatList, ScrollView, StyleSheet, View } from "react-native";
+import Animated, { FadeIn } from "react-native-reanimated";
+
+import { FilterDropdown } from "@/components/FilterDropdown";
+import { ItemCard } from "@/components/ItemCard";
+import { wardrobeItems } from "@/data/wardrobeData";
 
 const filterOptions = {
-  types: ['All', 'top', 'bottom', 'outerwear', 'footwear', 'accessory'],
-  styles: ['All', 'Crop', 'Striped', 'Denim', 'Wide Leg', 'Golden', 'Elegant', 'Classic', 'Casual', 'Professional', 'A-Line'],
-  moods: ['All', 'Casual', 'Date', 'Work', 'Formal', 'Weekend', 'Party', 'Beach'],
-  colors: ['All', 'Black', 'Blue', 'Brown', 'Golden', 'Green', 'Gray', 'Cream', 'White', 'Navy'],
+  types: ["All", "top", "bottom", "outerwear", "footwear", "accessory"],
+  styles: [
+    "All",
+    "Crop",
+    "Striped",
+    "Denim",
+    "Wide Leg",
+    "Golden",
+    "Elegant",
+    "Classic",
+    "Casual",
+    "Professional",
+    "A-Line",
+  ],
+  moods: [
+    "All",
+    "Casual",
+    "Date",
+    "Work",
+    "Formal",
+    "Weekend",
+    "Party",
+    "Beach",
+  ],
+  colors: [
+    "All",
+    "Black",
+    "Blue",
+    "Brown",
+    "Golden",
+    "Green",
+    "Gray",
+    "Cream",
+    "White",
+    "Navy",
+  ],
 };
 
 export function ItemsTab() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
-  
-  const [selectedType, setSelectedType] = useState('All');
-  const [selectedStyle, setSelectedStyle] = useState('All');
-  const [selectedMood, setSelectedMood] = useState('All');
-  const [selectedColor, setSelectedColor] = useState('All');
+  const colors = Colors;
 
-  const filteredItems = wardrobeItems.filter(item => {
+  const [selectedType, setSelectedType] = useState("All");
+  const [selectedStyle, setSelectedStyle] = useState("All");
+  const [selectedMood, setSelectedMood] = useState("All");
+  const [selectedColor, setSelectedColor] = useState("All");
+
+  const filteredItems = wardrobeItems.filter((item) => {
     // Type filter
-    if (selectedType !== 'All' && item.category !== selectedType.toLowerCase()) {
+    if (
+      selectedType !== "All" &&
+      item.category !== selectedType.toLowerCase()
+    ) {
       return false;
     }
     // Style filter
-    if (selectedStyle !== 'All' && !item.style.includes(selectedStyle)) {
+    if (selectedStyle !== "All" && !item.style.includes(selectedStyle)) {
       return false;
     }
     // Mood filter (check occasions)
-    if (selectedMood !== 'All' && !item.occasion?.some(occ => occ.toLowerCase() === selectedMood.toLowerCase())) {
+    if (
+      selectedMood !== "All" &&
+      !item.occasion?.some(
+        (occ) => occ.toLowerCase() === selectedMood.toLowerCase()
+      )
+    ) {
       return false;
     }
     // Color filter
-    if (selectedColor !== 'All' && item.color !== selectedColor) {
+    if (selectedColor !== "All" && item.color !== selectedColor) {
       return false;
     }
     return true;
@@ -51,7 +90,7 @@ export function ItemsTab() {
       <ItemCard
         item={item}
         onPress={() => {
-          console.log('Item pressed:', item.name);
+          console.log("Item pressed:", item.name);
         }}
         showTags={true}
       />
@@ -62,8 +101,8 @@ export function ItemsTab() {
     <View style={styles.container}>
       {/* Scrollable Filter Dropdowns */}
       <View style={styles.filtersContainer}>
-        <ScrollView 
-          horizontal 
+        <ScrollView
+          horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.scrollableFilters}
         >
@@ -100,6 +139,7 @@ export function ItemsTab() {
         renderItem={renderItemCard}
         keyExtractor={(item) => item.id}
         numColumns={2}
+        scrollEnabled={false}
         contentContainerStyle={styles.gridContainer}
         columnWrapperStyle={styles.row}
         showsVerticalScrollIndicator={false}
@@ -119,11 +159,11 @@ const styles = StyleSheet.create({
   scrollableFilters: {
     paddingHorizontal: 0,
     gap: Spacing.sm,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   filterRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: Spacing.sm,
     gap: Spacing.sm,
   },
@@ -132,7 +172,7 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.xl,
   },
   row: {
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   itemContainer: {
     flex: 1,

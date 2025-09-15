@@ -1,7 +1,7 @@
-import { BorderRadius, Spacing, Typography } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import React from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { BorderRadius, Spacing, Typography } from "@/constants/theme";
+import { Pressable, StyleSheet, Text } from "react-native";
+
+import React from "react";
 
 interface CollectionChipProps {
   chip: { id: string; name: string; icon: string };
@@ -10,34 +10,20 @@ interface CollectionChipProps {
   colors: any;
 }
 
-export function CollectionChip({ chip, isSelected, onPress, colors }: CollectionChipProps) {
-  const colorScheme = useColorScheme();
-
-  // Get colors for chips - black text and gray border for unselected, transparent orange bg with orange border for selected
-  const getChipColors = () => {
-    if (isSelected) {
-      return {
-        background: 'rgba(255, 165, 0, 0.1)', // Light orange background
-        border: '#FFA500', // Orange border
-        text: '#FF8C00', // Dark orange text
-      };
-    }
-    return {
-      background: 'transparent',
-      border: colors.border,
-      text: colors.text,
-    };
-  };
-
-  const chipColors = getChipColors();
-
+export function CollectionChip({
+  chip,
+  isSelected,
+  onPress,
+  colors,
+}: CollectionChipProps) {
   return (
     <Pressable
       style={[
         styles.chip,
         {
-          backgroundColor: chipColors.background,
-          borderColor: isSelected ? chipColors.border : colors.border,
+          backgroundColor: isSelected ? colors.chipBackground : "transparent",
+          borderColor: colors.border,
+          borderWidth: isSelected ? 1 : 0.5,
         },
       ]}
       onPress={onPress}
@@ -46,15 +32,15 @@ export function CollectionChip({ chip, isSelected, onPress, colors }: Collection
       accessibilityState={{ selected: isSelected }}
     >
       <Text style={styles.chipIcon}>{chip.icon}</Text>
-      <Text style={styles.chipText}>{chip.name}</Text>
+      <Text style={[styles.chipText, { color: colors.text }]}>{chip.name}</Text>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   chip: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.xxl,

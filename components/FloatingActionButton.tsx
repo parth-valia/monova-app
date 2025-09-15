@@ -1,23 +1,23 @@
-import { Colors, Spacing } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { createShadowStyle } from '@/utils/shadow';
-import React from 'react';
-import { Pressable, StyleSheet } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSequence, withSpring } from 'react-native-reanimated';
+import { Colors, Spacing } from "@/constants/theme";
+import { Pressable, StyleSheet } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withSpring,
+} from "react-native-reanimated";
+
+import { createShadowStyle } from "@/utils/shadow";
+import React from "react";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export function FloatingActionButton() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
   const scale = useSharedValue(1);
   const rotation = useSharedValue(0);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      { scale: scale.value },
-      { rotate: `${rotation.value}deg` },
-    ],
+    transform: [{ scale: scale.value }, { rotate: `${rotation.value}deg` }],
   }));
 
   const handlePress = () => {
@@ -27,15 +27,15 @@ export function FloatingActionButton() {
       withSpring(1.1, { damping: 15, stiffness: 400 }),
       withSpring(1, { damping: 15, stiffness: 400 })
     );
-    
+
     // Sparkle rotation effect
     rotation.value = withSequence(
       withSpring(-10, { damping: 15, stiffness: 400 }),
       withSpring(10, { damping: 15, stiffness: 400 }),
       withSpring(0, { damping: 15, stiffness: 400 })
     );
-    
-    console.log('FAB pressed - Add new item');
+
+    console.log("FAB pressed - Add new item");
   };
 
   const handlePressIn = () => {
@@ -53,7 +53,7 @@ export function FloatingActionButton() {
       style={[
         styles.fab,
         {
-          backgroundColor: colorScheme === 'dark' ? colors.text : colors.backgroundSecondary,
+          backgroundColor: Colors.backgroundSecondary,
         },
         animatedStyle,
       ]}
@@ -64,25 +64,29 @@ export function FloatingActionButton() {
       accessibilityLabel="Add new item"
       accessibilityHint="Tap to add a new wardrobe item"
     >
-      <Animated.Text style={[styles.fabIcon, { color: colorScheme === 'dark' ? colors.text : colors.background }]}>✨</Animated.Text>
+      <Animated.Text
+        style={[styles.fabIcon, { color: Colors.backgroundSecondary }]}
+      >
+        ✨
+      </Animated.Text>
     </AnimatedPressable>
   );
 }
 
 const styles = StyleSheet.create({
   fab: {
-    position: 'absolute',
-    bottom: 100, // Above tab bar
+    position: "absolute",
+    bottom: 30, // Above tab bar
     right: Spacing.xl,
     width: 56,
     height: 56,
     borderRadius: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
-    ...createShadowStyle('#000', { width: 0, height: 4 }, 0.3, 8, 8),
+    justifyContent: "center",
+    alignItems: "center",
+    ...createShadowStyle("#000", { width: 0, height: 4 }, 0.3, 8, 8),
   },
   fabIcon: {
     fontSize: 24,
-    color: '#FFFFFF',
+    color: "#FFFFFF",
   },
 });

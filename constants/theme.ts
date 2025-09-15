@@ -3,68 +3,36 @@
  * Colors, typography, and spacing based on the reference design
  */
 
-import { Platform } from 'react-native';
-
-const tintColorLight = '#000000';
-const tintColorDark = '#fff';
+import { Platform } from "react-native";
 
 export const Colors = {
-  light: {
-    text: '#000000',
-    textSecondary: '#666666',
-    textTertiary: '#999999',
-    background: '#F5F3F0', // Light beige background like in reference
-    backgroundSecondary: '#FFFFFF', // White for cards
-    tint: tintColorLight,
-    icon: '#666666',
-    tabIconDefault: '#999999',
-    tabIconSelected: tintColorLight,
-    border: '#E0E0E0',
-    borderLight: '#F0F0F0',
-    chip: '#F5F5F5',
-    chipActive: '#000000',
-    chipText: '#666666',
-    chipTextActive: '#FFFFFF',
-    shadow: 'rgba(0, 0, 0, 0.08)',
-    overlay: 'rgba(0, 0, 0, 0.5)',
-    // Specific chip colors from reference
-    chipWork: '#F4E6D7', // Peach for Work
-    chipLeisure: '#E8F4F8', // Light blue for Leisure  
-    chipDate: '#F8E8F4', // Light pink for Date
-    chipParty: '#F0E8F8', // Light purple for Party
-    chipWorkText: '#8B4513',
-    chipLeisureText: '#2E8B57',
-    chipDateText: '#D2691E',
-    chipPartyText: '#8A2BE2',
-  },
-  dark: {
-    text: '#FFFFFF',
-    textSecondary: '#B0B0B0',
-    textTertiary: '#808080',
-    background: '#121212',
-    backgroundSecondary: '#1E1E1E',
-    tint: tintColorDark,
-    icon: '#B0B0B0',
-    tabIconDefault: '#666666',
-    tabIconSelected: tintColorDark,
-    border: '#2A2A2A',
-    borderLight: '#333333',
-    chip: '#2A2A2A',
-    chipActive: '#FFFFFF',
-    chipText: '#B0B0B0',
-    chipTextActive: '#121212',
-    shadow: 'rgba(0, 0, 0, 0.3)',
-    overlay: 'rgba(0, 0, 0, 0.6)',
-    // Dark mode chip colors
-    chipWork: '#3A2A1A',
-    chipLeisure: '#1A2A2A', 
-    chipDate: '#2A1A2A',
-    chipParty: '#251A2A',
-    chipWorkText: '#D2B48C',
-    chipLeisureText: '#87CEEB',
-    chipDateText: '#DDA0DD',
-    chipPartyText: '#DA70D6',
-  },
+  text: "#1A1A1A",
+  textSecondary: "#5D5D5D",
+  textTertiary: "#7A7A7A",
+  background: "#FAFAFA",
+  backgroundSecondary: "#FFFFFF",
+  tint: "#000000",
+  icon: "#444444",
+  tabIconDefault: "#888888",
+  tabIconSelected: "#000000",
+  border: "#F1DBD2",
+  borderLight: "#EEEEEE",
+  chipBackground: "#F7E5DE",
+  chipActive: "#2C2C2C",
+  chipText: "#444444",
+  chipTextActive: "#FFFFFF",
+  shadow: "rgba(0, 0, 0, 0.1)",
+  overlay: "rgba(0, 0, 0, 0.6)",
+  // Specific chip colors with better contrast
+  chipWork: "#FFE8D6",
+  chipLeisure: "#E0F2FE",
+  chipDate: "#FCE7F3",
+  chipParty: "#F3E8FF",
+  chipWorkText: "#9A3412",
+  chipLeisureText: "#0E7490",
+  chipDateText: "#BE185D",
+  chipPartyText: "#7E22CE",
+  orange: "#D46A3C",
 };
 
 export const Spacing = {
@@ -108,35 +76,36 @@ export const Typography = {
     xxxxxl: 32,
   },
   weights: {
-    light: '300' as const,
-    normal: '400' as const,
-    medium: '500' as const,
-    semibold: '600' as const,
-    bold: '700' as const,
+    light: "300" as const,
+    normal: "400" as const,
+    medium: "500" as const,
+    semibold: "600" as const,
+    bold: "700" as const,
   },
 };
 
 export const Fonts = Platform.select({
   ios: {
     /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
+    sans: "system-ui",
     /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
+    serif: "ui-serif",
     /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
+    rounded: "ui-rounded",
     /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
+    mono: "ui-monospace",
   },
   default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
+    sans: "normal",
+    serif: "serif",
+    rounded: "normal",
+    mono: "monospace",
   },
   web: {
     sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
     serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
+    rounded:
+      "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
     mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
   },
 });
