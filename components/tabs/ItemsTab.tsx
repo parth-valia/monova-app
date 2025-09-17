@@ -1,10 +1,10 @@
-import { Colors, Spacing } from "@/constants/theme";
 import React, { useState } from "react";
 import { FlatList, ScrollView, StyleSheet, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 
 import { FilterDropdown } from "@/components/FilterDropdown";
 import { ItemCard } from "@/components/ItemCard";
+import { Spacing } from "@/constants/theme";
 import { wardrobeItems } from "@/data/wardrobeData";
 
 const filterOptions = {
@@ -47,8 +47,6 @@ const filterOptions = {
 };
 
 export function ItemsTab() {
-  const colors = Colors;
-
   const [selectedType, setSelectedType] = useState("All");
   const [selectedStyle, setSelectedStyle] = useState("All");
   const [selectedMood, setSelectedMood] = useState("All");

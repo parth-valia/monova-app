@@ -14,9 +14,9 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 
-import { IconSymbol } from "@/components/ui/icon-symbol";
 import { OutfitCard as OutfitCardType } from "@/data/wardrobeData";
 import { createShadowStyle } from "@/utils/shadow";
+import IconSymbol from "./ui/icon-symbol";
 
 interface OutfitCardProps {
   outfit: OutfitCardType;

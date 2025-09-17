@@ -1,40 +1,37 @@
-import React from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { Colors, Spacing } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { FilterChip } from './FilterChip';
-import { router } from 'expo-router';
+import { Spacing } from "@/constants/theme";
+import { ScrollView, StyleSheet, View } from "react-native";
+
+import { router } from "expo-router";
+import React from "react";
+import { FilterChip } from "./FilterChip";
 
 interface TabNavigationProps {
   activeTab: string;
 }
 
 export function TabNavigation({ activeTab }: TabNavigationProps) {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
-
   const handleTabPress = (tab: string) => {
     switch (tab) {
-      case 'Collections':
-        router.push('/(tabs)/');
+      case "Collections":
+        router.push("/(tabs)/");
         break;
-      case 'Outfits':
-        router.push('/(tabs)/outfits');
+      case "Outfits":
+        router.push("/(tabs)/outfits");
         break;
-      case 'Items':
-        router.push('/(tabs)/items');
+      case "Items":
+        router.push("/(tabs)/items");
         break;
     }
   };
 
   return (
     <View style={styles.container}>
-      <ScrollView 
-        horizontal 
+      <ScrollView
+        horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.tabScroll}
       >
-        {['Collections', 'Outfits', 'Items'].map((tab) => (
+        {["Collections", "Outfits", "Items"].map((tab) => (
           <FilterChip
             key={tab}
             label={tab}

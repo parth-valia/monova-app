@@ -1,21 +1,12 @@
 import { BorderRadius, Colors, Spacing, Typography } from "@/constants/theme";
 import React, { useState } from "react";
-import {
-  FlatList,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 
 import { OutfitCard } from "@/components/OutfitCard";
 import { outfitCards } from "@/data/wardrobeData";
 import { AddNewChip } from "../chips/AddNewChip";
 import { CollectionChip } from "../chips/CollectionChip";
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const collectionChips = [
   { id: "work", name: "Work", icon: "💼" },

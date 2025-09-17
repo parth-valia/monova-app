@@ -14,8 +14,8 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 
-import { IconSymbol } from "@/components/ui/icon-symbol";
 import { createShadowStyle } from "@/utils/shadow";
+import IconSymbol from "./ui/icon-symbol";
 
 interface FilterDropdownProps {
   label: string;

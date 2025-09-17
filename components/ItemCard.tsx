@@ -13,10 +13,10 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 
-import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Accessibility } from "@/constants/accessibility";
 import { WardrobeItem } from "@/data/wardrobeData";
 import { createShadowStyle } from "@/utils/shadow";
+import IconSymbol from "./ui/icon-symbol";
 
 interface ItemCardProps {
   item: WardrobeItem;

@@ -1,10 +1,16 @@
 import { Platform } from 'react-native';
 
-// Import the appropriate component based on the platform
-const IconSymbol = Platform.select({
-  web: () => require('./icon-symbol.web').default,
-  default: () => require('./icon-symbol.ios').IconSymbol,
-})();
+let IconSymbol: any;
+
+if (Platform.OS === 'web') {
+  // For web, use the web component with Material Icons
+  const WebIconSymbol = require('./icon-symbol.web').default;
+  IconSymbol = WebIconSymbol;
+} else {
+  // For native platforms, use the native component
+  const { IconSymbol: NativeIconSymbol } = require('./icon-symbol.ios');
+  IconSymbol = NativeIconSymbol;
+}
 
 export { IconSymbol };
 export default IconSymbol;
